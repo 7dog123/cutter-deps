@@ -1,5 +1,5 @@
 
-ROOT_DIR=${CURDIR}
+ROOT_DIR=/usr
 
 PLATFORMS_SUPPORTED=win linux macos
 ifeq (${OS},Windows_NT)
@@ -193,13 +193,13 @@ endif
 ifeq (${PLATFORM},macos)
 	make -C "${PYTHON_SRC_DIR}" frameworkinstallframework > /dev/null
 else
-	make -C "${PYTHON_SRC_DIR}" install > /dev/null
+	sudo make -C "${PYTHON_SRC_DIR}" install > /dev/null
 endif
 
 ifeq (${PLATFORM},linux)
 	for lib in "${PYTHON_PREFIX}/lib/python${PYTHON_VERSION_MAJOR_MINOR}/lib-dynload"/*.so ; do \
 		echo "  patching $$lib" && \
-		"${PATCHELF_EXECUTABLE}" --set-rpath '$$ORIGIN/../..' "$$lib" || exit 1 ; \
+		sudo "${PATCHELF_EXECUTABLE}" --set-rpath '$$ORIGIN/../..' "$$lib" || exit 1 ; \
 	done
 endif
 
@@ -311,7 +311,7 @@ ifeq (${PLATFORM},win)
 	cd "${PYSIDE_SRC_DIR}/build/shiboken2" && ninja install
 else
 	make -C "${PYSIDE_SRC_DIR}/build/shiboken2" -j${BUILD_THREADS} > /dev/null
-	make -C "${PYSIDE_SRC_DIR}/build/shiboken2" install > /dev/null
+	sudo make -C "${PYSIDE_SRC_DIR}/build/shiboken2" install > /dev/null
 endif
 
 ifeq (${PLATFORM},macos)
@@ -345,7 +345,7 @@ ifeq (${PLATFORM},win)
 	cp "${LLVM_INSTALL_DIR}/bin/libclang.dll" "${PYSIDE_PREFIX}/bin/"
 else
 	make -C "${PYSIDE_SRC_DIR}/build/pyside2" -j${BUILD_THREADS}
-	make -C "${PYSIDE_SRC_DIR}/build/pyside2" install
+	sudo make -C "${PYSIDE_SRC_DIR}/build/pyside2" install
 endif
 
 .PHONY: clean-pyside
