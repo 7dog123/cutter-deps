@@ -25,9 +25,12 @@ jobs:
         set -euo pipefail
         sudo apt remove llvm-9
         sudo apt install libclang-8-dev llvm-8 mesa-common-dev libgl1-mesa-dev wget qtbase5-dev qtdeclarative5-dev
-        wget http://archive.ubuntu.com/ubuntu/pool/universe/q/qtbase-opensource-src/qtbase5-dev_5.15.2+dfsg-5_amd64.deb
-        wget http://archive.ubuntu.com/ubuntu/pool/universe/q/qtdeclarative-opensource-src/qtdeclarative5-dev_5.15.2+dfsg-5_amd64.deb
-        sudo dpkg -i *.deb
+        wget http://archive.ubuntu.com/ubuntu/pool/universe/q/qtbase-opensource-src/qtbase-opensource-src_5.15.2+dfsg.orig.tar.xz
+        tar xvf *tar.xz
+        rm -rv *xz
+        cd
+        ./configure --prefix=/usr && make && sudo make install
+        cd ..
         make
         echo UPLOAD_FILE=cutter-deps-linux.tar.gz >> $GITHUB_ENV
         echo UPLOAD_ASSET_TYPE=application/gzip >> $GITHUB_ENV
